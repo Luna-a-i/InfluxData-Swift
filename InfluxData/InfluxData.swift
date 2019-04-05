@@ -17,7 +17,7 @@ public class InfluxData {
     // server address
     var _server: String = ""
     // server port
-    var _port: uint16 = 9999
+    var _port: UInt16 = 9999
     // Data Bucket
     var _db: String = ""
     // Authorization Token
@@ -41,7 +41,7 @@ public class InfluxData {
      * @param bucket Data bucket to use -- MUST already exist!
      * @param token InfluxDB Token
      */
-    public func setConfig(server: String, port: uint16, db: String, token: String) {
+    public func setConfig(server: String, port: UInt16, db: String, token: String) {
         self._server = server
         self._port = port
         self._db = db
@@ -68,7 +68,7 @@ public class InfluxData {
     /*
      * @param port Set server port. default is 9999
      */
-    public func setPort(port: uint16){
+    public func setPort(port: UInt16){
         self._port = port
     }
     

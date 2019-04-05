@@ -3,7 +3,7 @@
 //  Copyright © 2019 David G. Simmons. All rights reserved.
 //
 
-import Cocoa
+import Foundation
 
 
 /*

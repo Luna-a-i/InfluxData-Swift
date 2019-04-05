@@ -11,17 +11,15 @@ import Cocoa
  */
 public class InfluxData {
     // Write endpoint for InfluxDB v2.0
-    let _urlString: String = "/api/v2/write?org="
+    let _urlString: String = "/write?"
     // transmission protocol.
     var _proto: String = "http"
     // server address
     var _server: String = ""
     // server port
     var _port: uint16 = 9999
-    // Influx Organization
-    var _org: String = ""
     // Data Bucket
-    var _bucket: String = ""
+    var _db: String = ""
     // Authorization Token
     var _token: String = ""
     // timestamp precision
@@ -37,17 +35,16 @@ public class InfluxData {
     }
     /**
      * Configure an influxDB instance with all required values
-     * @param server InfluxDB v2 server to use
+     * @param server InfluxDB v1.7 server to use
      * @param port Server port
      * @param org Influxdb Organization to use -- MUST already exist!
      * @param bucket Data bucket to use -- MUST already exist!
      * @param token InfluxDB Token
      */
-    public func setConfig(server: String, port: uint16, org: String, bucket: String, token: String) {
+    public func setConfig(server: String, port: uint16, db: String, token: String) {
         self._server = server
         self._port = port
-        self._org = org
-        self._bucket = bucket
+        self._db = db
         self._token = token
         
     }
@@ -76,17 +73,10 @@ public class InfluxData {
     }
     
     /**
-     * @param org Set the InfluxDB Organization to use -- MUST already aexist!
-     */
-    public func setOrg(org: String){
-        self._org = org
-    }
-    
-    /**
      * @param bucket Set the data bucket to use -- MUST already exist
      */
-    public func setBucket(bucket: String){
-        self._bucket = bucket
+    public func setDb(db: String){
+        self._db = db
     }
     
     /**
@@ -118,10 +108,10 @@ public class InfluxData {
      */
     public func getConfig() -> String{
         if(_port > 0){
-            return "\(_proto)://\(_server):\(_port)\(_urlString)\(_org)&bucket=\(_bucket)&precision=\(_precision)"
+            return "\(_proto)://\(_server):\(_port)\(_urlString)&db=\(_db)&precision=\(_precision)"
         }
         else {
-            return "\(_proto)://\(_server)\(_urlString)\(_org)&bucket=\(_bucket)&precision=\(_precision)"
+            return "\(_proto)://\(_server)\(_urlString)&db=\(_db)&precision=\(_precision)"
         }
     }
     
@@ -141,7 +131,7 @@ public class InfluxData {
         let postUrl = URL(string: self.getConfig())
         var request = URLRequest(url: postUrl!)
         request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
-        request.setValue("Token " + self._token, forHTTPHeaderField: "Authorization")
+        request.setValue("Bearer " + self._token, forHTTPHeaderField: "Authorization")
         request.httpMethod = "POST"
         request.httpBody = points.data(using: .utf8)
         let task = URLSession.shared.dataTask(with: request) { data, response, error in
@@ -179,7 +169,7 @@ public class InfluxData {
         let postUrl = URL(string: self.getConfig())
         var request = URLRequest(url: postUrl!)
         request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
-        request.setValue("Token " + self._token, forHTTPHeaderField: "Authorization")
+        request.setValue("Bearer " + self._token, forHTTPHeaderField: "Authorization")
         request.httpMethod = "POST"
         request.httpBody = "\(dataPoint.toString()) \(getTimeStamp())".data(using: .utf8)
         let task = URLSession.shared.dataTask(with: request) { data, response, error in

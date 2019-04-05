@@ -12,6 +12,7 @@ import Foundation
 public class InfluxData {
     // Write endpoint for InfluxDB v2.0
     let _urlString: String = "/write?"
+    var _path: String = ""
     // transmission protocol.
     var _proto: String = "http"
     // server address
@@ -41,12 +42,12 @@ public class InfluxData {
      * @param bucket Data bucket to use -- MUST already exist!
      * @param token InfluxDB Token
      */
-    public func setConfig(server: String, port: UInt16, db: String, token: String) {
+    public func setConfig(server: String, port: UInt16, db: String, token: String, path: String = "") {
         self._server = server
         self._port = port
         self._db = db
         self._token = token
-        
+        self._path = path
     }
     
     /**
@@ -108,10 +109,10 @@ public class InfluxData {
      */
     public func getConfig() -> String{
         if(_port > 0){
-            return "\(_proto)://\(_server):\(_port)\(_urlString)&db=\(_db)&precision=\(_precision)"
+            return "\(_proto)://\(_server):\(_port)\(_path)\(_urlString)&db=\(_db)&precision=\(_precision)"
         }
         else {
-            return "\(_proto)://\(_server)\(_urlString)&db=\(_db)&precision=\(_precision)"
+            return "\(_proto)://\(_server)\(_path)\(_urlString)&db=\(_db)&precision=\(_precision)"
         }
     }
     

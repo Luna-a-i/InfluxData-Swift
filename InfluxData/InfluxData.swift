@@ -7,9 +7,9 @@
 import Cocoa
 #elseif os(Linux)
 import FoundationNetworking
-public typealias uint16 = UInt16
 #endif
 
+public typealias uint16 = UInt16
 /*
  *
  */

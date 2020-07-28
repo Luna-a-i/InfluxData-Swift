@@ -2,7 +2,7 @@
 //  Created by David G. Simmons on 2/21/19.
 //  Copyright © 2019 David G. Simmons. All rights reserved.
 //
-
+import Foundation
 #if os(macOS)
 import Cocoa
 #elseif os(Linux)
